@@ -1,8 +1,14 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Be My Valentine?</title>  <!-- Pixel / Minecraft-style font -->  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">  <style>
+  <title>Be My Valentine?</title>
+
+  <!-- Pixel / Minecraft-style font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
     * {
       box-sizing: border-box;
     }
@@ -59,6 +65,27 @@
       }
     }
 
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+      80% {
+        transform: scale(0.95);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+      to {
+        transform: translateY(-20vh) rotate(45deg);
+      }
+    }
+
     /* Popup */
     .popup {
       background: #fff0f7;
@@ -67,6 +94,7 @@
       text-align: center;
       z-index: 10;
       box-shadow: 8px 8px 0 #ff9bbf;
+      animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .popup h1 {
@@ -96,8 +124,33 @@
       background: #ff2f77;
     }
 
-  </style></head>
-<body>  <!-- Hearts -->  <script>
+  </style>
+</head>
+<body>
+
+  <!-- Hearts -->
+  <script>
+    // pixel click sound (retro beep)
+    function playPixelSound() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'square';
+      osc.frequency.value = 880;
+
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    }
+
+    // floating hearts
+
     for (let i = 0; i < 25; i++) {
       const heart = document.createElement('div');
       heart.className = 'heart';
@@ -106,11 +159,16 @@
       heart.style.animationDelay = Math.random() * 5 + 's';
       document.body.appendChild(heart);
     }
-  </script>  <!-- Popup -->  <div class="popup">
+  </script>
+
+  <!-- Popup -->
+  <div class="popup">
     <h1>do you want to be my valentine?</h1>
     <div class="buttons">
-      <button onclick="alert('i knew you would say yes <3')">yes</button>
-      <button onclick="alert('correct choice <3')">yes</button>
+      <button onclick="playPixelSound(); alert('YAY 💗 you are mine now')">yes</button>
+      <button onclick="playPixelSound(); alert('correct 💞 no escape')">yes</button>
     </div>
-  </div></body>
+  </div>
+
+</body>
 </html>
